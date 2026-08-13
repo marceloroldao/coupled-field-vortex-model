@@ -1,5 +1,22 @@
 # Validation Protocol
 
+## V0.1 campaign entry point
+
+The publication-oriented Issue #4 campaign is implemented as one fail-soft
+entry point. It writes machine-readable records first and produces figures only
+by rereading those records:
+
+```bash
+python -m pip install -r requirements-validation.txt
+python -m validation.run_v01 --quick
+python -m validation.run_v01 --full
+```
+
+Outputs are written to `results/v01_validation/`. A scientific disagreement or
+individual BVP failure is recorded and does not stop later validation blocks.
+The checked-in report describes the most recent execution environment; it must
+not be interpreted as a successful campaign when its status is `INCOMPLETE`.
+
 This project uses a strict separation between analytic derivation, numerical evidence, candidate interpretation and rejected hypotheses.
 
 ## Required checks
