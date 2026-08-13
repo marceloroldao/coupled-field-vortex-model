@@ -2,45 +2,69 @@
 
 ## Scientific identity
 
-Independent coupled-field research line. This repository intentionally does not use the ontology or claims of Resolutive Physics.
+Independent coupled-field research line formulated in standard classical field theory and superconductivity language. This project is intentionally distinct from Resolutive Physics.
 
-## Reference version
+## Release target
 
-`v0.1-bootstrap`
+`v0.1.0` — first reproducible research release and Zenodo archival target.
 
-## Reference fields
+## Central V0.1 result
 
-- complex scalar `psi`;
-- real scalar `X`;
-- optional gauge field `A_mu` in the electromagnetic sector.
+\[
+q_{\rm crit}^2
+=
+2b-C(\rho_X)c^2+O(c^3),
+\]
 
-## Classical control parameters
+with
 
-- scalar sector: `(a, b, c)`;
-- gauge sector: `q`.
+\[
+C(\rho_X)=
+\frac{\int F^2(1+U_{\rho_X})\,dx}
+{\int G^2F^2\,dx},
+\qquad
+U_{\rho_X}''
+=
+\frac{U_{\rho_X}+F^2}{\rho_X}.
+\]
 
-## Current validated direction
+The derivation includes exact \(O(c)\) Gibbs/bulk cancellation, on-shell charged-sector cancellation at \(O(c^2)\), reduction to the neutral response, full-interface numerical checks, and \(O(c^3)\) truncation scaling.
 
-- analytic phase structure and mixed-mode spectrum;
-- recovery of known Ginzburg-Landau / Abelian-Higgs limits;
-- investigation of vortex interactions in the mixed phase.
+## Gate status
 
-## Candidate results awaiting repository reproduction
+- A: PASS
+- B: PASS
+- C: PASS
+- D: PASS
+- E: PASS
+- F: PASS
+- G: INCOMPLETE — complementary curvature matching, deferred beyond core V0.1
+- H: PASS
+- I: PASS
+- J: PASS
+- K: PASS
 
-- molecular-vortex window between asymptotic repulsion/separation and fused winding states;
-- spectral/nonlinear classifier for the sign of `Delta_2 = E_(n=2)-2E_(n=1)`;
-- finite-separation multi-vortex bound states;
-- irreducible three-body vortex interactions;
-- near-critical long-range mixed mode.
+No remaining scientific blocker exists for the agreed central V0.1 claim.
 
-## Rejected / not supported as fundamental ingredients of this model
+## Candidate contribution
 
-- physical 4-pi periodicity from the scalar phase alone;
-- golden-ratio input;
-- universal acceleration scale `a_R`;
-- direct identification of `|psi|^2` with universal energy density;
-- identification of this project with Resolutive Physics.
+The specific neutral-scalar-induced displacement law and universal coefficient are treated as candidate contributions. The underlying Abelian-Higgs + neutral-scalar model class and BPS/giant-vortex frameworks are known.
 
-## Next milestone
+## Deferred work
 
-Reproduce the analytic formulas and build single-vortex and axial `n=1,2,3` numerical solvers with convergence tests before promoting any exploratory numerical values to repository results.
+- complete interface-to-giant-vortex curvature matching;
+- broader high-winding asymptotics;
+- multivortex/non-pairwise interactions;
+- material-specific or experimental calibration.
+
+## Release engineering
+
+Before Zenodo:
+
+1. synchronize README, manuscript, citation and license metadata;
+2. merge the licensing/Zenodo PR;
+3. run final repository-level validation on the release commit;
+4. create tag/release `v0.1.0`;
+5. verify custom academic/commercial licensing in Zenodo;
+6. archive the release;
+7. record DOI in README/CITATION metadata.
