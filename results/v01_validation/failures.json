@@ -1,0 +1,8 @@
+[
+  {
+    "block": "A-K",
+    "case": "campaign execution",
+    "diagnostic": "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403).",
+    "command": "python -m validation.run_v01 --full"
+  }
+]

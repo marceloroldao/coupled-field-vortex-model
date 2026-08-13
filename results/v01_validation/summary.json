@@ -1,0 +1,74 @@
+{
+  "campaign": "V0.1 Scientific Validation Campaign",
+  "issue": 4,
+  "mode": "full",
+  "overall": "INCOMPLETE",
+  "blocks": {
+    "A": {
+      "status": "INCOMPLETE",
+      "evidence": [
+        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+      ]
+    },
+    "B": {
+      "status": "INCOMPLETE",
+      "evidence": [
+        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+      ]
+    },
+    "C": {
+      "status": "INCOMPLETE",
+      "evidence": [
+        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+      ]
+    },
+    "D": {
+      "status": "INCOMPLETE",
+      "evidence": [
+        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+      ]
+    },
+    "E": {
+      "status": "INCOMPLETE",
+      "evidence": [
+        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+      ]
+    },
+    "F": {
+      "status": "INCOMPLETE",
+      "evidence": [
+        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+      ]
+    },
+    "G": {
+      "status": "INCOMPLETE",
+      "evidence": [
+        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+      ]
+    },
+    "H": {
+      "status": "INCOMPLETE",
+      "evidence": [
+        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+      ]
+    },
+    "I": {
+      "status": "INCOMPLETE",
+      "evidence": [
+        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+      ]
+    },
+    "J": {
+      "status": "INCOMPLETE",
+      "evidence": [
+        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+      ]
+    },
+    "K": {
+      "status": "INCOMPLETE",
+      "evidence": [
+        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+      ]
+    }
+  }
+}

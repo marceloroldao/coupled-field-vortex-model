@@ -1,0 +1,9 @@
+{
+  "python": "3.14.4 (main, May  1 2026, 05:51:55) [GCC 13.3.0]",
+  "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+  "numpy": null,
+  "scipy": null,
+  "matplotlib": null,
+  "attempted_command": "python -m validation.run_v01 --full",
+  "environment_limitation": "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+}
