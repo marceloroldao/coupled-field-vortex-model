@@ -1,0 +1,29 @@
+{
+  "title": "Coupled Field Vortex Model: Reproducible V0.1 Research Release",
+  "upload_type": "software",
+  "description": "Reproducible research release for a coupled Abelian-Higgs and neutral-scalar vortex model. The V0.1 scope centers on perturbative displacement of the critical Bogomolny boundary, planar-interface calculations, numerical validation, and documented reproducibility. The model class is treated as established physics; candidate contributions are stated conservatively and separated from known results.",
+  "creators": [
+    {
+      "name": "Matos, Marcelo Roldão"
+    }
+  ],
+  "access_right": "open",
+  "license": "other-open",
+  "keywords": [
+    "Abelian-Higgs model",
+    "neutral scalar field",
+    "vortices",
+    "Bogomolny point",
+    "critical coupling",
+    "planar interface",
+    "numerical reproducibility"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/marceloroldao/coupled-field-vortex-model",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ],
+  "notes": "Source-available academic-use licensing applies. Accredited universities and public research institutes receive the academic rights described in LICENSE.md without license fee. Commercial use requires a separate written commercial license. Zenodo metadata should be reviewed in the deposition UI before publication, especially the displayed license label and DOI-linked version."
+}

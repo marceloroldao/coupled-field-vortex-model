@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software or its scientific results, please cite the archived release and associated paper."
+title: "Coupled Field Vortex Model"
+type: software
+authors:
+  - family-names: "Matos"
+    given-names: "Marcelo Roldão"
+year: 2026
+repository-code: "https://github.com/marceloroldao/coupled-field-vortex-model"
+license: "LicenseRef-Academic-Commercial-Dual"
+keywords:
+  - Abelian-Higgs model
+  - neutral scalar field
+  - vortices
+  - Bogomolny point
+  - critical coupling
+  - planar interface
+  - numerical reproducibility
+abstract: >-
+  Reproducible research implementation and documentation for a coupled
+  Abelian-Higgs/neutral-scalar vortex model, with emphasis on perturbative
+  displacement of the critical Bogomolny boundary, planar-interface tests,
+  and vortex validation.
