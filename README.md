@@ -1,8 +1,8 @@
 # coupled-field-vortex-model
 
-Independent research project for a coupled complex-scalar, real-scalar and gauge-field model focused on mixed modes, vortex interactions, criticality and reproducible numerical tests.
+Research project for a coupled complex scalar, real scalar, and Abelian gauge-field model, focused on mixed scalar modes, vortex interactions, interfacial energy, criticality, and reproducible numerical tests.
 
-> **Scientific separation:** this repository is **not** part of Resolutive Physics / `resolutive-science`. It follows the same engineering, reproducibility and documentation standards, but represents an independent field-theory research line.
+The project is formulated entirely in the standard language of classical field theory, Abelian gauge theory, Ginzburg–Landau theory, topological defects, and superconductivity. Its scientific claims are evaluated directly against the established literature in those areas.
 
 ## Current model
 
@@ -18,7 +18,7 @@ with
 \widehat V=a|\psi|^2+b|\psi|^4+c|\psi|^2X^2-\frac12X^2+\frac14X^4.
 \]
 
-The electromagnetic extension is obtained through
+The Abelian gauge extension is obtained through
 
 \[
 D_\mu=\partial_\mu-iqA_\mu,
@@ -31,11 +31,12 @@ Classical scalar dynamics are controlled primarily by `(a, b, c)`, with `q` ente
 ## Research goals
 
 - derive and verify the phase diagram of the coupled-field model;
-- compute the mixed scalar modes `m_+` and `m_-` and their coherence lengths;
-- map vortex interaction regimes: separated, molecular and fused;
-- test spectral/nonlinear classifiers for vortex behavior;
+- compute the mixed scalar normal modes `m_+` and `m_-` and the associated correlation/coherence lengths;
+- map vortex interaction regimes, including separated vortices, bound states, and multiquanta vortices;
+- determine the relation between planar interfacial tension and the stability of high-winding vortices;
+- test spectral and nonlinear classifiers for vortex behavior;
 - quantify non-pairwise interactions for three or more vortices;
-- compare against multicomponent Ginzburg–Landau, Abelian-Higgs and type-1.5 literature;
+- compare directly with multicomponent Ginzburg–Landau, Abelian-Higgs, type-I/type-II, and type-1.5 literature;
 - document negative results and rejected hypotheses;
 - maintain fully reproducible numerical experiments.
 
@@ -51,20 +52,20 @@ Every scientific claim should be tagged with one of:
 
 ## Planned structure
 
-- `theory/` — action, derivations, phase diagram and analytic limits;
+- `theory/` — action, Euler–Lagrange equations, vacuum structure, phase diagram, normal modes, and analytic limits;
 - `src/` — reusable model and solver implementation;
-- `simulations/` — reproducible experiment entry points;
-- `tests/` — unit, regression and physics-consistency tests;
+- `simulations/` — reproducible numerical experiment entry points;
+- `tests/` — unit, regression, convergence, and physics-consistency tests;
 - `benchmarks/` — parameter sweeps and comparison baselines;
 - `results/` — machine-readable outputs and summarized findings;
-- `docs/` — methodology, decisions and validation reports;
+- `docs/` — methodology, numerical conventions, decisions, and validation reports;
 - `paper/` — manuscript sources and figures;
 - `references/` — literature notes and comparison matrix.
 
 ## Methodological rule
 
-New terms, interpretations or parameter choices are not promoted into the reference model merely because they produce a desired solution. A proposal must be tested against the previous version, documented, and retained only if it improves consistency, predictive value or empirical performance.
+New interaction terms, interpretations, or parameter choices are not added to the reference action merely because they produce a desired solution. A proposed extension must be compared with the minimal model, subjected to analytical and numerical consistency tests, and retained only when independently justified by symmetry, effective-field-theory reasoning, microscopic derivation, or empirical evidence.
 
 ## Current status
 
-Bootstrap phase. The working reference is the minimal coupled-field model above. Results discussed during exploration must be re-run from repository code before being marked `numerical` or used in publication.
+Active numerical-validation phase. The working reference is the minimal coupled scalar–Abelian-gauge model above. Numerical claims must be reproducible from repository code, include convergence checks where applicable, and be distinguished from analytic results and literature-known limits.
