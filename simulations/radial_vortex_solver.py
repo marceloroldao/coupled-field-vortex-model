@@ -8,15 +8,12 @@ Axisymmetric ansatz:
   psi = f(r) exp(i n phi)
   A = A_phi(r) e_phi
   X = X(r)
-
-The script solves n=1,2,3 sectors and reports E_n - n E_1.
 """
 from __future__ import annotations
 
 import argparse
 import numpy as np
 from scipy.integrate import solve_bvp, simpson
-from scipy.optimize import brentq
 
 
 def mixed_vacuum(a: float, b: float, c: float) -> tuple[float, float]:
@@ -30,14 +27,29 @@ def mixed_vacuum(a: float, b: float, c: float) -> tuple[float, float]:
     return float(np.sqrt(rho)), float(np.sqrt(x2))
 
 
-def solve_vortex(a: float, b: float, c: float, q: float, n: int,
-                 radius: float = 22.0, points: int = 500, tol: float = 1e-5):
+def _solve_once(a: float, b: float, c: float, q: float, n: int,
+                radius: float, points: int, tol: float,
+                initial_solution=None, initial_n: int | None = None,
+                max_nodes: int = 120000):
     f0, x0 = mixed_vacuum(a, b, c)
     r = np.linspace(1e-5, radius, points)
-    f = f0*np.tanh(r)
-    x = x0 + (1.0-x0)*np.exp(-r)
-    A = (n/q)*(1.0-np.exp(-r*r))/(r+1e-12)
-    y = np.vstack([f, np.gradient(f,r), x, np.gradient(x,r), A, np.gradient(A,r)])
+
+    if initial_solution is None:
+        # Bag-informed profile is substantially more robust for large winding.
+        D = b-c*c
+        dV = (a+c)**2/(4*D)
+        Rb = np.sqrt(np.sqrt(2.0)*n/(q*np.sqrt(dV))) if dV > 0 else np.sqrt(n)
+        s = .5*(1+np.tanh((r-Rb)/1.5))
+        f = f0*s
+        x = 1.0 + (x0-1.0)*s
+        A = (n/q)*(1.0-np.exp(-(r/max(Rb,1e-6))**2))/(r+1e-12)
+        y = np.vstack([f, np.gradient(f,r), x, np.gradient(x,r), A, np.gradient(A,r)])
+    else:
+        y = initial_solution.sol(r).copy()
+        if initial_n is not None and initial_n != n:
+            scale = n/initial_n
+            y[4] *= scale
+            y[5] *= scale
 
     def ode(rr, yy):
         f, fp, x, xp, A, Ap = yy
@@ -49,11 +61,49 @@ def solve_vortex(a: float, b: float, c: float, q: float, n: int,
         return np.vstack([fp, fpp, xp, xpp, Ap, App])
 
     def bc(ya, yb):
-        return np.array([ya[0], ya[3], ya[4], yb[0]-f0, yb[2]-x0, yb[4]-n/(q*radius)])
+        return np.array([ya[0], ya[3], ya[4],
+                         yb[0]-f0, yb[2]-x0, yb[4]-n/(q*radius)])
 
-    sol = solve_bvp(ode, bc, r, y, tol=tol, max_nodes=20000)
+    sol = solve_bvp(ode, bc, r, y, tol=tol, max_nodes=max_nodes)
     if sol.status != 0:
         raise RuntimeError(sol.message)
+    return sol
+
+
+def _continuation_ladder(n: int) -> list[int]:
+    if n <= 8:
+        return [n]
+    ladder = [1,2,4,8]
+    step = 4 if n <= 40 else 8
+    k = 12
+    while k < n:
+        ladder.append(k)
+        k += step
+    if ladder[-1] != n:
+        ladder.append(n)
+    return sorted(set(x for x in ladder if x <= n))
+
+
+def solve_vortex(a: float, b: float, c: float, q: float, n: int,
+                 radius: float = 22.0, points: int = 500, tol: float = 1e-5,
+                 initial_solution=None, initial_n: int | None = None,
+                 use_continuation: bool = True, max_nodes: int = 120000):
+    """Solve one axisymmetric vortex sector.
+
+    For high winding, the default path uses continuation in n.  This changes
+    only the numerical initial guess, not the equations, boundary conditions,
+    action, or convergence tolerance.  Callers may pass an existing solution
+    explicitly for continuation in q or n.
+    """
+    if initial_solution is not None or not use_continuation or n <= 8:
+        return _solve_once(a,b,c,q,n,radius,points,tol,
+                           initial_solution,initial_n,max_nodes)
+
+    sol = None
+    prev_n = None
+    for k in _continuation_ladder(n):
+        sol = _solve_once(a,b,c,q,k,radius,points,tol,sol,prev_n,max_nodes)
+        prev_n = k
     return sol
 
 

@@ -43,29 +43,47 @@ def scalar_masses(p: Parameters) -> tuple[float, float]:
 
 def solve_universal(rho_x: float, length: float = 12.0, points: int = 500,
                     tol: float = 1e-6):
-    """Solve the documented universal BPS profile and linear response system.
+    """Solve the universal BPS background and first-order response system.
 
-    The truncated asymptotic conditions are F(-L)=0, G'(-L)=1,
-    F(+L)=1, G(+L)=0; P and R vanish at both ends and U approaches the
-    bulk particular solutions 0 and -1. These conditions make the finite-box
-    approximation explicit rather than silently treating it as infinite.
+    The finite-box asymptotic conditions follow the perturbative expansion used
+    in the v0.1 derivation:
+
+    Background:
+      F(-L)=0, G'(-L)=1, F(+L)=1, G(+L)=0.
+
+    Charged first-order response:
+      P(-L)=0, R'(-L)=-1, P(+L)=-1/2, R(+L)=0.
+
+    Neutral first-order response:
+      U(-L)=0, U(+L)=-1.
+
+    These are truncated asymptotic boundary conditions; finite-box convergence
+    must still be checked in the validation campaign.
     """
     if rho_x <= 0:
         raise ValueError("rho_X must be positive")
     z = np.linspace(-length, length, points)
     s = .5*(1+np.tanh(z))
     F = s
-    G = -z*(1-s)
-    P = np.zeros_like(z); R = np.zeros_like(z); U = -s
+    G = (z-length)*(1-s)
+    P = -.5*s
+    R = -(z-length)*(1-s)
+    U = -s
     y = np.vstack((F, np.gradient(F,z), G, np.gradient(G,z),
                    P, np.gradient(P,z), R, np.gradient(R,z),
                    U, np.gradient(U,z)))
+
     def ode(_, y):
         F,Fp,G,Gp,P,Pp,R,Rp,U,Up = y
-        return np.vstack((Fp, G*G*F+(F*F-1)*F, Gp, 2*F*F*G,
-            Pp, (G*G-1+3*F*F)*P+2*G*F*R+F,
-            Rp, 4*G*F*P+2*F*F*R, Up, (U+F*F)/rho_x))
-    def bc(a,b):
-        return np.array((a[0], a[3]-1, b[0]-1, b[2],
-                         a[4], b[4], a[6], b[6], a[8], b[8]+1))
+        return np.vstack((Fp, G*G*F+(F*F-1)*F,
+                          Gp, 2*F*F*G,
+                          Pp, (G*G-1+3*F*F)*P+2*G*F*R+F,
+                          Rp, 4*G*F*P+2*F*F*R,
+                          Up, (U+F*F)/rho_x))
+
+    def bc(left, right):
+        return np.array((left[0], left[3]-1, right[0]-1, right[2],
+                         left[4], left[7]+1, right[4]+.5, right[6],
+                         left[8], right[8]+1))
+
     return solve_bvp(ode, bc, z, y, tol=tol, max_nodes=50000)
