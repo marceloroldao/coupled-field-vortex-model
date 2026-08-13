@@ -1,1 +1,10 @@
-a,b,c,q,domain_size,initial_mesh_size,final_node_count,tolerance,integration_resolution,converged,residual_error_estimate,sigma
+a,b,c,q,n,domain_size,initial_mesh_size,final_node_count,tolerance,integration_resolution,converged,residual_error_estimate,sigma,message,record_type,parameter_label,A_interface,A_direct
+-0.8,1.0,0.4,1.2791745509961427,,28,700,1302,8e-06,12000,True,1.3663848589416246e-07,-0.00023467433052403214,The algorithm converged to the desired accuracy.,scan,reference,,
+-0.8,1.0,0.4,1.2801745509961426,,28,700,700,8e-06,12000,True,8.151175027522611e-08,-0.0001694507475938894,The algorithm converged to the desired accuracy.,scan,reference,,
+-0.8,1.0,0.4,1.2811745509961427,,28,700,700,8e-06,12000,True,8.150179996295549e-08,-0.00010431408289550537,The algorithm converged to the desired accuracy.,scan,reference,,
+-0.8,1.0,0.4,1.2821745509961426,,28,700,700,8e-06,12000,True,8.145361880445506e-08,-3.926408680244304e-05,The algorithm converged to the desired accuracy.,scan,reference,,
+-0.8,1.0,0.4,1.2831745509961425,,28,700,700,8e-06,12000,True,8.14058312416691e-08,2.5699429114403464e-05,The algorithm converged to the desired accuracy.,scan,reference,,
+-0.8,1.0,0.4,1.2841745509961426,,28,700,700,8e-06,12000,True,8.135825706212755e-08,9.057665271940277e-05,The algorithm converged to the desired accuracy.,scan,reference,,
+-0.8,1.0,0.4,1.2851745509961425,,28,700,700,8e-06,12000,True,8.131114828510639e-08,0.00015536777131428038,The algorithm converged to the desired accuracy.,scan,reference,,
+-0.8,1,0.2,1.2821745509961426,,28,700,,8e-06,12000,True,8e-06,-0.010168081732879043,,matching,low-c,-0.010168081732879043,-0.002029472521614906
+-0.8,1,0.55,1.2821745509961426,,28,700,,8e-06,12000,False,,,The maximum number of mesh nodes is exceeded.,matching,high-c,,-0.002029472521614906

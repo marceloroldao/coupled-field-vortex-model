@@ -1,8 +1,30 @@
 [
   {
-    "block": "A-K",
-    "case": "campaign execution",
-    "diagnostic": "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403).",
-    "command": "python -m validation.run_v01 --full"
+    "block": "K",
+    "case": "b-c2 boundary",
+    "expected_failure": true,
+    "observed": "mixed branch requires b-c^2>0",
+    "passed": true
+  },
+  {
+    "block": "K",
+    "case": "negative v2",
+    "expected_failure": true,
+    "observed": "parameters are outside the mixed-vacuum region",
+    "passed": true
+  },
+  {
+    "block": "K",
+    "case": "local empirical approximations",
+    "expected_failure": true,
+    "observed": "not extrapolated; no rigorous global error bound",
+    "passed": true
+  },
+  {
+    "block": "K",
+    "case": "forced solver failure",
+    "expected_failure": true,
+    "observed": "The maximum number of mesh nodes is exceeded.",
+    "passed": true
   }
 ]

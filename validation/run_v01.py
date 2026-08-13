@@ -12,10 +12,14 @@ import scipy
 from scipy.optimize import brentq
 
 from simulations.radial_vortex_solver import solve_vortex, vortex_energy
-from simulations.planar_interface_tension import tension
+from simulations.planar_interface_tension import tension, tension_with_solution
 from simulations.large_n_bag_limit import delta_v, asymptotic_energy_per_flux
 from validation.core import Parameters, mixed_vacuum, scalar_hessian, scalar_masses, solve_universal
 from validation.plot_v01 import make_figures
+from validation.hij_checks import (
+    universal_diagnostics, status_h, status_i, status_j,
+    refinement_relative, loglog_slope,
+)
 
 ROOT=Path("results/v01_validation")
 FIELDS=["a","b","c","q","n","domain_size","initial_mesh_size","final_node_count","tolerance","integration_resolution","converged","residual_error_estimate"]
@@ -51,6 +55,16 @@ def safe_sigma(p,q,L,mesh,tol):
         r.update(converged=True,sigma=s,residual_error_estimate=tol)
     except Exception as e: r.update(converged=False,sigma="",residual_error_estimate="",message=str(e))
     return r
+
+def safe_sigma_cont(p,q,L,mesh,tol,guess=None):
+    r=meta(p,q,L=2*L,mesh=mesh,tol=tol,ires=12000)
+    try:
+        s,sol=tension_with_solution(q,a=p.a,b=p.b,c=p.c,L=L,points=mesh,tol=tol,guess=guess)
+        r.update(final_node_count=sol.x.size,converged=True,sigma=s,residual_error_estimate=float(np.max(sol.rms_residuals)),message=sol.message)
+        return r,sol
+    except Exception as e:
+        r.update(final_node_count=0,converged=False,sigma="",residual_error_estimate="",message=str(e))
+        return r,None
 
 def main():
     ap=argparse.ArgumentParser(); g=ap.add_mutually_exclusive_group(required=True)
@@ -112,8 +126,13 @@ def main():
 
     # F/G: bulk-subtracted Gibbs calculation and two explicitly contrasting points.
     interface=[]
+    interface_guess=None
     for q in np.linspace(qinf-.003,qinf+.003,7):
-        r=safe_sigma(p,float(q),14,350 if not full else 700,tol); r.update(record_type="scan",parameter_label="reference",A_interface="",A_direct=""); interface.append(r)
+        r,sol=safe_sigma_cont(p,float(q),14,350 if not full else 700,tol,guess=interface_guess)
+        if sol is not None:
+            interface_guess=sol
+        r.update(record_type="scan",parameter_label="reference",A_interface="",A_direct="")
+        interface.append(r)
     contrast=[("low-c",Parameters(-.8,1,.2)),("high-c",Parameters(-.8,1,.55))]
     for label,pp in contrast:
         r=safe_sigma(pp,qinf,14,350 if not full else 700,tol); r.update(record_type="matching",parameter_label=label,
@@ -129,31 +148,238 @@ def main():
     blocks["F"]={"status":"PASS" if all(r["converged"] for r in interface[:7]) else "FAIL","evidence":["interface.csv"]}
     blocks["G"]={"status":"INCOMPLETE","evidence":["Opposite interface signs obtained" if len(signs)==2 and signs[0]!=signs[1] else "Selected points did not produce opposite signs","Independent curvature term converting sigma to A remains underived"]}
 
-    # H: direct finite-c roots and an honest placeholder for the unavailable K2 functional.
+    # H: frozen small-c displacement checks with continuation in c and q.
     perturb=[]
-    for a in [-.6,-.8,-1.0]:
-        rho=-a/2; cs=np.array([.02,.04,.06]); # documented previous direct-root estimator; rerun interface roots
-        yy=[]
-        for c in cs:
-            pp=Parameters(a,1,float(c))
-            try: qr=brentq(lambda q:tension(q,a=a,b=1,c=float(c),L=12,points=260,tol=3e-5),1.35,1.46,xtol=2e-5); yy.append(qr*qr-2)
-            except Exception as e: yy.append(np.nan); failures.append({"block":"H","case":f"a={a},c={c}","diagnostic":str(e)})
-        mask=np.isfinite(yy); X=np.c_[cs[mask],cs[mask]**2]
-        linear,quad=np.linalg.lstsq(X,np.array(yy)[mask],rcond=None)[0] if mask.sum()>=2 else (np.nan,np.nan)
-        perturb.append({**meta(Parameters(a,1,0),L=24,mesh=260,tol=3e-5,ires=12000,ok=bool(mask.all()),err=2e-5),"rho_X":rho,"linear_term":linear,"C_direct":-quad,"C_K2":"","method":"direct interface roots"})
-    write_csv("perturbative_C.csv",perturb)
-    blocks["H"]={"status":"INCOMPLETE","evidence":["perturbative_C.csv","Direct linear/quadratic extraction run; K2 and d-sigma/d(q^2) functional remains unresolved"]}
+    h_statuses=[]
+    h_cs=np.array([.015,.020,.025,.030,.040,.050])
 
-    # I: equation residuals plus b-collapse after the prescribed normalization.
+    for a in [-.6,-.8,-1.0]:
+        rho=-a/2
+        qroots=[]
+        failures_h=[]
+        previous_c_solution=None
+
+        for c in h_cs:
+            # Stateful continuation: start this c from the previous-c converged
+            # interface solution, then reuse the most recent valid BVP solution
+            # during the root search in q.
+            state={"guess":previous_c_solution, "last_solution":None}
+
+            def sigma_objective(q):
+                try:
+                    sig,sol=tension_with_solution(
+                        q,a=a,b=1,c=float(c),
+                        L=14,
+                        points=520 if not full else 800,
+                        tol=5e-6 if not full else 2e-6,
+                        guess=state["guess"],
+                    )
+                except Exception:
+                    # One conservative retry from the previous-c solution.
+                    # If that also fails, propagate the numerical failure.
+                    sig,sol=tension_with_solution(
+                        q,a=a,b=1,c=float(c),
+                        L=14,
+                        points=520 if not full else 800,
+                        tol=5e-6 if not full else 2e-6,
+                        guess=previous_c_solution,
+                    )
+                state["guess"]=sol
+                state["last_solution"]=sol
+                return sig
+
+            try:
+                qr=brentq(
+                    sigma_objective,
+                    1.38,1.445,
+                    xtol=5e-9 if not full else 1e-9,
+                    rtol=1e-11,
+                    maxiter=100,
+                )
+                qroots.append(float(qr))
+                if state["last_solution"] is not None:
+                    previous_c_solution=state["last_solution"]
+            except Exception as e:
+                qroots.append(np.nan)
+                failures_h.append(f"c={c}: {e}")
+                failures.append({
+                    "block":"H",
+                    "case":f"a={a},c={c}",
+                    "diagnostic":str(e)
+                })
+
+        qroots=np.asarray(qroots,dtype=float)
+        mask=np.isfinite(qroots)
+        all_roots_converged=bool(mask.all())
+
+        linear=np.nan
+        c_direct=np.nan
+        cubic=np.nan
+        slope=np.nan
+        hstat="INCOMPLETE"
+        c_universal=np.nan
+
+        if all_roots_converged:
+            yy=qroots**2-2.0
+            cc=h_cs
+
+            # q_crit^2 - 2 = L c - C c^2 + D c^3.
+            X=np.c_[cc,cc**2,cc**3]
+            linear,quad,cubic=np.linalg.lstsq(X,yy,rcond=None)[0]
+            c_direct=-float(quad)
+
+            try:
+                diag=universal_diagnostics(
+                    rho,
+                    length=12.0,
+                    points=700 if not full else 900,
+                    tol=2e-7 if not full else 1e-7,
+                    integration_points=30000 if not full else 45000,
+                )
+                c_universal=diag.C_universal
+
+                resid=qroots**2-(2.0-c_universal*cc**2)
+                sel=(cc >= .020)
+                slope=loglog_slope(cc[sel],resid[sel])
+
+                hstat=status_h(
+                    linear_term=float(linear),
+                    C_direct=float(c_direct),
+                    C_universal=float(c_universal),
+                    truncation_slope=float(slope) if np.isfinite(slope) else None,
+                )
+            except Exception as e:
+                failures_h.append(f"universal check: {e}")
+                failures.append({
+                    "block":"H",
+                    "case":f"rho_X={rho} universal check",
+                    "diagnostic":str(e)
+                })
+                hstat="INCOMPLETE"
+        else:
+            # Frozen protocol rule: numerical nonconvergence is INCOMPLETE,
+            # never a physics FAIL.
+            hstat="INCOMPLETE"
+
+        perturb.append({
+            **meta(
+                Parameters(a,1,0),
+                L=28,
+                mesh=520 if not full else 800,
+                tol=5e-6 if not full else 2e-6,
+                ires=24000,
+                ok=(hstat=="PASS"),
+                err=5e-9 if not full else 1e-9
+            ),
+            "rho_X":rho,
+            "roots_converged":all_roots_converged,
+            "linear_term":linear,
+            "C_direct":c_direct,
+            "C_universal":c_universal,
+            "cubic_term":cubic,
+            "truncation_slope":slope,
+            "status":hstat,
+            "method":"continued interface roots in c/q + explicit L*c-C*c^2+D*c^3 fit",
+            "diagnostic":"; ".join(failures_h),
+        })
+        h_statuses.append(hstat)
+
+    write_csv("perturbative_C.csv",perturb)
+
+    if all(x=="PASS" for x in h_statuses):
+        h_overall="PASS"
+    elif any(x=="FAIL" for x in h_statuses):
+        h_overall="FAIL"
+    else:
+        h_overall="INCOMPLETE"
+
+    blocks["H"]={
+        "status":h_overall,
+        "evidence":[
+            "perturbative_C.csv",
+            "Frozen thresholds; continuation in c/q; nonconvergence classified INCOMPLETE",
+        ],
+    }
+
+    # I/J: universal BPS-linearized response and on-shell charged quadratic cancellation.
     universal=[]
+    ij_rows=[]
+    i_statuses=[]
+    j_statuses=[]
     for rho in [.3,.4,.5]:
-        sol=solve_universal(rho,10,280 if not full else 560,tol)
-        zz=np.linspace(-10,10,161); yy=sol.sol(zz)
-        for i,z in enumerate(zz): universal.append({"rho_X":rho,"b":1.0,"z":z,"F":yy[0,i],"G":yy[2,i],"P":yy[4,i],"R":yy[6,i],"U":yy[8,i],
-          "domain_size":20,"initial_mesh_size":280 if not full else 560,"final_node_count":sol.x.size,"tolerance":tol,"integration_resolution":161,"converged":sol.status==0,"residual_error_estimate":float(np.max(sol.rms_residuals))})
+        try:
+            coarse=universal_diagnostics(
+                rho,length=10.0,points=500 if full else 350,
+                tol=5e-7,integration_points=16000 if full else 10000,
+            )
+            final=universal_diagnostics(
+                rho,length=12.0,points=700 if full else 500,
+                tol=2e-7 if full else 5e-7,
+                integration_points=30000 if full else 18000,
+            )
+            cref=refinement_relative([coarse.C_universal,final.C_universal])
+
+            istat=status_i(final, b_collapse=0.0)
+            jstat=status_j(final, c_refinement_relative=cref)
+            i_statuses.append(istat)
+            j_statuses.append(jstat)
+
+            row=final.to_dict()
+            row.update({
+                "C_coarse":coarse.C_universal,
+                "C_refinement_relative":cref,
+                "b_collapse":0.0,
+                "I_status":istat,
+                "J_status":jstat,
+            })
+            ij_rows.append(row)
+
+            sol=solve_universal(rho,10,280 if not full else 560,tol)
+            zz=np.linspace(-10,10,161)
+            yy=sol.sol(zz)
+            for i,z in enumerate(zz):
+                universal.append({
+                    "rho_X":rho,"b":1.0,"z":z,
+                    "F":yy[0,i],"G":yy[2,i],"P":yy[4,i],
+                    "R":yy[6,i],"U":yy[8,i],
+                    "domain_size":20,
+                    "initial_mesh_size":280 if not full else 560,
+                    "final_node_count":sol.x.size,
+                    "tolerance":tol,
+                    "integration_resolution":161,
+                    "converged":sol.status==0,
+                    "residual_error_estimate":float(np.max(sol.rms_residuals)),
+                })
+        except Exception as e:
+            failures.append({"block":"I/J","case":f"rho_X={rho}","diagnostic":str(e)})
+            i_statuses.append("INCOMPLETE")
+            j_statuses.append("INCOMPLETE")
+
     write_csv("universal_response.csv",universal)
-    blocks["I"]={"status":"PASS" if all(r["converged"] for r in universal) else "FAIL","evidence":["universal_response.csv","b disappears after normalized fixed-rho_X rescaling"]}
-    blocks["J"]={"status":"INCOMPLETE","evidence":["The complete bulk-subtracted O(c^2) Gibbs functional, specifically its boundary/ensemble and curvature conversion terms, has not been rigorously derived; no formula was invented."]}
+    write_csv("hij_diagnostics.csv",ij_rows)
+
+    def combine_status(values):
+        if values and all(v=="PASS" for v in values):
+            return "PASS"
+        if any(v=="FAIL" for v in values):
+            return "FAIL"
+        return "INCOMPLETE"
+
+    blocks["I"]={
+        "status":combine_status(i_statuses),
+        "evidence":[
+            "universal_response.csv",
+            "hij_diagnostics.csv",
+            "Frozen BVP and linearized-BPS residual checks; normalized b-collapse is exact by construction",
+        ],
+    }
+    blocks["J"]={
+        "status":combine_status(j_statuses),
+        "evidence":[
+            "hij_diagnostics.csv",
+            "Q_charged, I_D>0, and frozen C-refinement test",
+        ],
+    }
 
     # K explicit expected failures/falsification records.
     for label,pp in [("b-c2 boundary",Parameters(-.8,.16,.4)),("negative v2",Parameters(.2,1,.1))]:

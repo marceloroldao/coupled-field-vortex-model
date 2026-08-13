@@ -49,14 +49,19 @@ def solve_interface(q,a=-0.8,b=1.0,c=0.4,L=14.0,points=800,tol=1e-6,guess=None):
         raise RuntimeError(sol.message)
     return sol,Hc,Vmix
 
-def tension(q,**kwargs):
+def tension_with_solution(q,**kwargs):
+    """Return (sigma, BVP solution), allowing continuation via guess=..."""
     L=kwargs.get('L',14.0)
     sol,Hc,Vmix=solve_interface(q,**kwargs)
     a=kwargs.get('a',-0.8); b=kwargs.get('b',1.0); c=kwargs.get('c',0.4)
     z=np.linspace(-L,L,24000)
     f,fp,x,xp,A,Bf=sol.sol(z)
     g=fp**2+q*q*A*A*f*f+0.5*xp**2+0.5*Bf**2+potential(f,x,a,b,c)-Hc*Bf
-    return float(simpson(g-Vmix,x=z))
+    return float(simpson(g-Vmix,x=z)),sol
+
+def tension(q,**kwargs):
+    sigma,_=tension_with_solution(q,**kwargs)
+    return sigma
 
 if __name__=='__main__':
     p=argparse.ArgumentParser()
