@@ -28,6 +28,17 @@ D_\mu=\partial_\mu-iqA_\mu,
 
 Classical scalar dynamics are controlled primarily by `(a, b, c)`, with `q` entering the gauge sector.
 
+## Effective-limit documentation
+
+The compact variational reference and its principal effective limits are documented in:
+
+- [`theory/master_equation.md`](theory/master_equation.md) — variational reference, variables, scope, and validation rules;
+- [`theory/electromagnetic_limit.md`](theory/electromagnetic_limit.md) — Abelian gauge / Maxwell limit and validation targets;
+- [`theory/quantum_limit.md`](theory/quantum_limit.md) — complex-scalar, phase-current, mixed-mode, and nonrelativistic wave limits;
+- [`theory/cosmological_limit.md`](theory/cosmological_limit.md) — homogeneous FLRW reduction, effective energy density/pressure, and cosmological validation targets.
+
+These documents distinguish recovery of established physics (`known-limit`) from model-specific hypotheses (`candidate`). Recovery of a known equation is not treated as novelty by itself.
+
 ## Research goals
 
 - derive and verify the phase diagram of the coupled-field model;
@@ -37,6 +48,7 @@ Classical scalar dynamics are controlled primarily by `(a, b, c)`, with `q` ente
 - test spectral and nonlinear classifiers for vortex behavior;
 - quantify non-pairwise interactions for three or more vortices;
 - compare directly with multicomponent Ginzburg–Landau, Abelian-Higgs, type-I/type-II, and type-1.5 literature;
+- derive and verify electromagnetic, wave/nonrelativistic, and cosmological effective limits from the same variational core;
 - document negative results and rejected hypotheses;
 - maintain fully reproducible numerical experiments.
 
