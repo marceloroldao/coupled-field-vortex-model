@@ -108,6 +108,40 @@ jobs:
           if-no-files-found: warn
           retention-days: 90
 
+  sigma-leading-prediction:
+    name: V0.2 no-fit sigma prediction
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs:
+      - unit-tests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-validation.txt
+
+      - name: Install validation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-validation.txt
+
+      - name: Run G3 no-fit leading sigma prediction
+        run: python -m simulations.v02_sigma_leading_prediction
+
+      - name: Upload V0.2 sigma prediction evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v02-sigma-prediction-${{ github.run_id }}
+          path: results/v02_validation/
+          if-no-files-found: warn
+          retention-days: 90
+
   full-validation:
     name: Full scientific campaign
     runs-on: ubuntu-latest
