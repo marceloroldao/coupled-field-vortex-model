@@ -1,12 +1,16 @@
 cff-version: 1.2.0
-message: "If you use this software or its scientific results, please cite the archived release and associated paper."
+message: "If you use this software or its scientific results, please cite the archived V0.1.0 release."
 title: "Coupled Field Vortex Model"
 type: software
 authors:
   - family-names: "Matos"
     given-names: "Marcelo Roldão"
+version: "0.1.0"
+date-released: "2026-08-14"
 year: 2026
 repository-code: "https://github.com/marceloroldao/coupled-field-vortex-model"
+url: "https://doi.org/10.5281/zenodo.21936796"
+doi: "10.5281/zenodo.21936796"
 license: "LicenseRef-Academic-Commercial-Dual"
 keywords:
   - Abelian-Higgs model
