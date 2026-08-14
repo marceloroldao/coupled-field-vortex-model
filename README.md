@@ -4,6 +4,14 @@ Reproducible research project for a coupled Abelian-Higgs field and real neutral
 
 The project is formulated entirely in the standard language of classical field theory, Abelian gauge theory, Ginzburg–Landau theory, topological defects, and superconductivity. It is scientifically distinct from Resolutive Physics.
 
+## Archival record
+
+- V0.1.0 DOI: `10.5281/zenodo.21936796`
+- Concept DOI (all versions): `10.5281/zenodo.21936795`
+- Archived version: `v0.1.0`
+
+For reproducibility of the V0.1 scientific results, cite the version-specific DOI above. The concept DOI should be used when referring to the software project across versions.
+
 ## Reference model
 
 The dimensionless scalar sector is
@@ -100,19 +108,19 @@ python -m validation.run_v01 --quick
 python -m validation.run_v01 --full
 ```
 
-The final archived release should preserve machine-readable outputs, environment metadata, solver tolerances, convergence diagnostics, and the frozen acceptance criteria.
+The archived V0.1.0 release preserves machine-readable outputs, environment metadata, solver tolerances, convergence diagnostics, and the frozen acceptance criteria.
 
 ## Licensing
 
-The intended release uses source-available academic licensing:
+This project uses a source-available academic-use license:
 
 - accredited universities and public research institutes: academic research/teaching use without license fee under `LICENSE.md`;
 - commercial products, paid services, proprietary integrations, commercial deliverables, or monetized redistribution: separate written commercial license required.
 
-This is not an OSI-approved open-source license.
+This is not an OSI-approved open-source license. No patent rights are granted except by separate written agreement. See `LICENSE.md` and `COMMERCIAL_LICENSE.md` for the controlling terms.
 
-## Release target
+## Release
 
-Target: `v0.1.0` + Zenodo archival DOI.
+Current archived research release: `v0.1.0`.
 
-Before publication, verify the displayed custom license in Zenodo and do not accept a permissive default license accidentally.
+Version-specific DOI: `10.5281/zenodo.21936796`.
