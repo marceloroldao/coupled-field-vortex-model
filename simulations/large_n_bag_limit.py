@@ -19,7 +19,7 @@ import argparse
 import numpy as np
 from scipy.optimize import brentq
 
-from radial_vortex_solver import mixed_vacuum, solve_vortex, vortex_energy
+from .radial_vortex_solver import mixed_vacuum, solve_vortex, vortex_energy
 
 
 def vacuum_energy(a: float, b: float, c: float) -> float:

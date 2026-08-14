@@ -15,7 +15,7 @@ import argparse
 import numpy as np
 from scipy.optimize import brentq
 
-from radial_vortex_solver import solve_vortex, vortex_energy
+from .radial_vortex_solver import solve_vortex, vortex_energy
 
 
 def energy(q: float, n: int, a: float, b: float, c: float,

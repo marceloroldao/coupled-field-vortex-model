@@ -1,1 +1,4 @@
-a,b,c,rho_X,linear_term,C_direct,C_K2,converged,residual_error_estimate
+a,b,c,q,n,domain_size,initial_mesh_size,final_node_count,tolerance,integration_resolution,converged,residual_error_estimate,rho_X,roots_converged,linear_term,C_direct,C_universal,cubic_term,truncation_slope,status,method,diagnostic
+-0.6,1,0,,,28,800,,2e-06,24000,True,1e-09,0.3,True,9.066754332133062e-06,2.2917896187903595,2.2908317457904164,0.38854670341241654,3.027994191605768,PASS,continued interface roots in c/q + explicit L*c-C*c^2+D*c^3 fit,
+-0.8,1,0,,,28,800,,2e-06,24000,True,1e-09,0.4,True,1.018117186713213e-05,2.3760714757377395,2.3749767354588314,0.3180495346186857,3.041307407271338,PASS,continued interface roots in c/q + explicit L*c-C*c^2+D*c^3 fit,
+-1.0,1,0,,,28,800,,2e-06,24000,True,1e-09,0.5,True,1.0772649649701995e-05,2.4560674379829237,2.4548794807690753,0.23927868080284237,3.064653474693609,PASS,continued interface roots in c/q + explicit L*c-C*c^2+D*c^3 fit,

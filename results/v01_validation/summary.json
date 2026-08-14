@@ -2,73 +2,79 @@
   "campaign": "V0.1 Scientific Validation Campaign",
   "issue": 4,
   "mode": "full",
-  "overall": "INCOMPLETE",
   "blocks": {
     "A": {
-      "status": "INCOMPLETE",
+      "status": "PASS",
       "evidence": [
-        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+        "analytic_identities.json"
       ]
     },
     "B": {
-      "status": "INCOMPLETE",
+      "status": "PASS",
       "evidence": [
-        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+        "bogomolny.csv"
       ]
     },
     "C": {
-      "status": "INCOMPLETE",
+      "status": "PASS",
       "evidence": [
-        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+        "convergence.csv"
       ]
     },
     "D": {
-      "status": "INCOMPLETE",
+      "status": "PASS",
       "evidence": [
-        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+        "giant_vortices.csv"
       ]
     },
     "E": {
-      "status": "INCOMPLETE",
+      "status": "PASS",
       "evidence": [
-        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+        "independent bag root q_inf=1.282174551"
       ]
     },
     "F": {
-      "status": "INCOMPLETE",
+      "status": "PASS",
       "evidence": [
-        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+        "interface.csv"
       ]
     },
     "G": {
       "status": "INCOMPLETE",
       "evidence": [
-        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+        "Selected points did not produce opposite signs",
+        "Independent curvature term converting sigma to A remains underived"
       ]
     },
     "H": {
-      "status": "INCOMPLETE",
+      "status": "PASS",
       "evidence": [
-        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+        "perturbative_C.csv",
+        "Frozen thresholds; continuation in c/q; nonconvergence classified INCOMPLETE"
       ]
     },
     "I": {
-      "status": "INCOMPLETE",
+      "status": "PASS",
       "evidence": [
-        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+        "universal_response.csv",
+        "hij_diagnostics.csv",
+        "Frozen BVP and linearized-BPS residual checks; normalized b-collapse is exact by construction"
       ]
     },
     "J": {
-      "status": "INCOMPLETE",
+      "status": "PASS",
       "evidence": [
-        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+        "hij_diagnostics.csv",
+        "Q_charged, I_D>0, and frozen C-refinement test"
       ]
     },
     "K": {
-      "status": "INCOMPLETE",
+      "status": "PASS",
       "evidence": [
-        "Required NumPy/SciPy/Matplotlib packages are unavailable and package downloads are blocked by the execution environment (HTTP 403)."
+        "failures.json"
       ]
     }
-  }
+  },
+  "q_inf": 1.2821745509961426,
+  "overall": "INCOMPLETE"
 }

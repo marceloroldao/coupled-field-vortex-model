@@ -1,1 +1,16 @@
-a,b,c,q,n,domain_size,initial_mesh_size,final_node_count,tolerance,integration_resolution,converged,residual_error_estimate
+a,b,c,q,n,domain_size,initial_mesh_size,final_node_count,tolerance,integration_resolution,converged,residual_error_estimate,energy,message,sigma,record_type
+-0.8,1.0,0,1.4142135623730951,1,22,160,576,5e-06,5000,True,4.992887417002987e-06,2.5132739245559086,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,2,22,160,535,5e-06,5000,True,4.986469554393493e-06,5.026548081385195,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,3,22,160,538,5e-06,5000,True,4.986436405557411e-06,7.539822325012888,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,4,22,160,542,5e-06,5000,True,4.986436408368153e-06,10.053096458865179,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,,24,160,,5e-06,12000,True,5e-06,,,1.20416895890945e-09,sigma
+-0.8,1.0,0,1.4142135623730951,1,22,320,729,5e-06,5000,True,4.966731526567384e-06,2.513274113489034,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,2,22,320,682,5e-06,5000,True,4.90097264429402e-06,5.02654824406843,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,3,22,320,682,5e-06,5000,True,4.9009713808714666e-06,7.539822506509626,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,4,22,320,682,5e-06,5000,True,4.9009713826834505e-06,10.053096649101981,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,,24,320,,5e-06,12000,True,5e-06,,,7.541508624099825e-11,sigma
+-0.8,1.0,0,1.4142135623730951,1,22,640,1037,5e-06,5000,True,4.972862935182497e-06,2.5132741604782796,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,2,22,640,994,5e-06,5000,True,4.97347280913109e-06,5.026548247547657,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,3,22,640,990,5e-06,5000,True,4.950665465125727e-06,7.5398223776876945,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,4,22,640,990,5e-06,5000,True,4.950665464454634e-06,10.053096501230048,The algorithm converged to the desired accuracy.,,
+-0.8,1.0,0,1.4142135623730951,,24,640,,5e-06,12000,True,5e-06,,,6.966788842169652e-12,sigma
