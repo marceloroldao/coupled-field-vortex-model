@@ -1,8 +1,11 @@
-validation/__pycache__/run_v01.cpython-311.pyc
-validation/__pycache__/__init__.cpython-311.pyc
-simulations/__pycache__/radial_vortex_solver.cpython-311.pyc
-simulations/__pycache__/planar_interface_tension.cpython-311.pyc
-simulations/__pycache__/large_n_bag_limit.cpython-311.pyc
+# Python generated files
+__pycache__/
+*.py[cod]
+
+# Test/cache artifacts
+.pytest_cache/
+
+# Temporary V0.1 maintenance files
 RUN_V01_PATCH.txt
 apply_hij_integration.py
 apply_h_highres.py
