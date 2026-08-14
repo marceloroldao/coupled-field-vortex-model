@@ -1,7 +1,7 @@
 # V0.1 Scientific Validation Report
 
 ## 1. Executive summary
-The `full` campaign completed without suppressing scientific or solver failures. Overall status: **INCOMPLETE**.
+The `full` campaign completed without suppressing scientific or solver failures. Overall campaign status: **INCOMPLETE**, solely because Block G remains explicitly deferred beyond the central V0.1 claim. Within the frozen V0.1 scientific gate, blocks A–F and H–K pass.
 
 ## 2. Block status
 
@@ -46,7 +46,11 @@ The mixed vacuum identities, scalar masses, c=0 reduction, and Abelian-Higgs Bog
 Direct finite-winding roots, the independently computed bag root, and neutral-field interface profiles are numerical model-specific results subject to the uncertainties shown.
 
 ## 10. Candidate novel contributions requiring literature verification
-The controlled small-c displacement, reduction to C(rho_X), and quantitative interface/high-winding matching remain candidates until derivation and external literature verification.
+The controlled small-c displacement and reduction to C(rho_X) are candidate contributions pending external literature verification. Complete quantitative interface-to-giant-vortex curvature matching remains deferred and is not part of the central V0.1 claim.
 
-## 11. Explicit blockers for v0.1.0
-Block G lacks an independently derived interface curvature coefficient. Block H lacks the independent K2 evaluation. Block J lacks the rigorous complete bulk-subtracted quadratic Gibbs functional. Any FAIL rows in `failures.json` must also be resolved or accepted as scoped limitations.
+## 11. Explicit limitations for v0.1.0
+Block G remains **INCOMPLETE** because the independent interface-curvature coefficient needed for complete interface-to-giant-vortex matching has not yet been derived.
+
+This limitation is explicitly deferred beyond the central V0.1 claim and does not block the validated perturbative displacement result.
+
+Blocks A–F and H–K pass the frozen V0.1 scientific gate. No additional unresolved blocker is asserted for the agreed central V0.1 claim.
