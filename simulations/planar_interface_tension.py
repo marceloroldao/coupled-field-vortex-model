@@ -18,7 +18,7 @@ def vacuum(a,b,c):
 def potential(f,x,a,b,c):
     return a*f*f+b*f**4+c*f*f*x*x-0.5*x*x+0.25*x**4
 
-def solve_interface(q,a=-0.8,b=1.0,c=0.4,L=14.0,points=800,tol=1e-6,guess=None):
+def solve_interface(q,a=-0.8,b=1.0,c=0.4,L=14.0,points=800,tol=1e-6,guess=None,max_nodes=50000):
     v,x0=vacuum(a,b,c)
     Vmix=potential(v,x0,a,b,c)
     Vn=potential(0.0,1.0,a,b,c)
@@ -44,7 +44,7 @@ def solve_interface(q,a=-0.8,b=1.0,c=0.4,L=14.0,points=800,tol=1e-6,guess=None):
         ])
     def bc(ya,yb):
         return np.array([ya[0],ya[2]-1,ya[5]-Hc,yb[0]-v,yb[2]-x0,yb[4]])
-    sol=solve_bvp(ode,bc,z,y,tol=tol,max_nodes=50000)
+    sol=solve_bvp(ode,bc,z,y,tol=tol,max_nodes=max_nodes)
     if sol.status!=0:
         raise RuntimeError(sol.message)
     return sol,Hc,Vmix
