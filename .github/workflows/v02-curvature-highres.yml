@@ -13,7 +13,7 @@ jobs:
   curvature-highres:
     name: High-resolution A0 convergence
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,6 +32,9 @@ jobs:
 
       - name: Run full curvature convergence diagnostic
         run: python -m simulations.v02_curvature_diagnostics --mode full
+
+      - name: Run robust A0 domain extrapolation
+        run: python -m simulations.v02_a0_extrapolation
 
       - name: Upload high-resolution curvature evidence
         if: always()
