@@ -1,14 +1,16 @@
 """V0.2 robust A0 domain-convergence and extrapolation diagnostic.
 
-This script does not use giant-vortex data.  It attacks only the numerical
+This script does not use giant-vortex data. It attacks only the numerical
 closure of the planar curvature coefficient candidate A0 by:
 
 1. solving the same planar interface at several domain sizes L;
 2. trying several q-continuation seed offsets when a BVP branch is delicate;
 3. choosing the converged solution with the smallest reported BVP residual;
-4. comparing simple finite-domain extrapolation families using only A0(L).
+4. comparing simple finite-domain extrapolation families using only A0(L);
+5. repeating the extrapolation on the asymptotic tail to diagnose whether
+   small-L points bias the inferred infinite-domain limit.
 
-The extrapolation is diagnostic, not yet a scientific PASS gate.  In
+The extrapolation is diagnostic, not yet a scientific PASS gate. In
 particular, a finite A0(infinity) estimate is not promoted to a physical
 curvature coefficient until the boundary/ensemble and radius-convention
 closure is complete.
@@ -74,11 +76,36 @@ def _aicc(rss,n,k):
     return float(aic + 2*k*(k+1)/(n-k-1))
 
 
+def _summarize_models(L,y,label):
+    summary=[]
+    for power,name in ((1.0,"Ainf+c/L"),(2.0,"Ainf+c/L^2")):
+        ainf,c,rss,_=_fit_linear_basis(L,y,power)
+        summary.append({"fit_set":label,"model":name,"A0_infinity":ainf,
+                        "aux1":c,"aux2":"","rss":rss,
+                        "aicc":_aicc(rss,len(L),2),"n_points":len(L),
+                        "L_min":float(np.min(L)),"L_max":float(np.max(L))})
+    try:
+        (ainf,c,mu),rss,_=_fit_exp(L,y)
+        summary.append({"fit_set":label,"model":"Ainf+c*exp(-mu L)",
+                        "A0_infinity":ainf,"aux1":c,"aux2":mu,"rss":rss,
+                        "aicc":_aicc(rss,len(L),3),"n_points":len(L),
+                        "L_min":float(np.min(L)),"L_max":float(np.max(L))})
+    except Exception as exc:
+        summary.append({"fit_set":label,"model":"Ainf+c*exp(-mu L)",
+                        "A0_infinity":"","aux1":"","aux2":"","rss":"",
+                        "aicc":"","n_points":len(L),"L_min":float(np.min(L)),
+                        "L_max":float(np.max(L)),"error":str(exc)})
+    return summary
+
+
 def run(outdir="results/v02_validation"):
     out=Path(outdir); out.mkdir(parents=True,exist_ok=True)
     tol=5e-7
-    max_nodes=300000
-    configs=[(14.,1100),(16.,1500),(18.,1900),(20.,2300),(22.,2700),(24.,3100)]
+    max_nodes=400000
+    configs=[
+        (14.,1100),(16.,1500),(18.,1900),(20.,2300),(22.,2700),(24.,3100),
+        (26.,3500),(28.,3900),(30.,4300),
+    ]
     seed_offsets=(-2e-3,-1e-3,-5e-4,5e-4)
     rows=[]
     for L,points in configs:
@@ -87,7 +114,7 @@ def run(outdir="results/v02_validation"):
                                              max_nodes=max_nodes,
                                              seed_offsets=seed_offsets)
             obs=curvature_observables(sol,QREF,Hc,Vmix,a=A,b=B,c=C,L=L,
-                                      integration_points=32000)
+                                      integration_points=36000)
             rows.append({"L":L,"points":points,"converged":True,
                          "seed_offset":dq,"solver_residual_max":resid,
                          "sigma":obs["sigma"],"A0_candidate":obs["A0_candidate"],
@@ -105,19 +132,15 @@ def run(outdir="results/v02_validation"):
     if len(good)>=4:
         L=np.array([float(r["L"]) for r in good])
         y=np.array([float(r["A0_candidate"]) for r in good])
-        for power,name in ((1.0,"Ainf+c/L"),(2.0,"Ainf+c/L^2")):
-            ainf,c,rss,_=_fit_linear_basis(L,y,power)
-            summary.append({"model":name,"A0_infinity":ainf,"aux1":c,"aux2":"",
-                            "rss":rss,"aicc":_aicc(rss,len(L),2)})
-        try:
-            (ainf,c,mu),rss,_=_fit_exp(L,y)
-            summary.append({"model":"Ainf+c*exp(-mu L)","A0_infinity":ainf,
-                            "aux1":c,"aux2":mu,"rss":rss,
-                            "aicc":_aicc(rss,len(L),3)})
-        except Exception as exc:
-            summary.append({"model":"Ainf+c*exp(-mu L)","A0_infinity":"",
-                            "aux1":"","aux2":"","rss":"","aicc":"",
-                            "error":str(exc)})
+        summary.extend(_summarize_models(L,y,"all_converged"))
+
+        tail_mask=L>=18.0
+        if int(np.sum(tail_mask))>=4:
+            summary.extend(_summarize_models(L[tail_mask],y[tail_mask],"tail_L_ge_18"))
+
+        deep_mask=L>=22.0
+        if int(np.sum(deep_mask))>=4:
+            summary.extend(_summarize_models(L[deep_mask],y[deep_mask],"tail_L_ge_22"))
 
     if summary:
         fields=sorted({k for r in summary for k in r})
