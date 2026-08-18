@@ -39,6 +39,9 @@ jobs:
       - name: Run planar-vs-large-n critical splitting diagnostic
         run: python -m simulations.v02_critical_splitting
 
+      - name: Run zero-tension curvature convergence diagnostic
+        run: python -m simulations.v02_qsigma_curvature
+
       - name: Upload high-resolution curvature evidence
         if: always()
         uses: actions/upload-artifact@v4
