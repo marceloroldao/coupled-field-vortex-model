@@ -36,6 +36,9 @@ jobs:
       - name: Run robust A0 domain extrapolation
         run: python -m simulations.v02_a0_extrapolation
 
+      - name: Run planar-vs-large-n critical splitting diagnostic
+        run: python -m simulations.v02_critical_splitting
+
       - name: Upload high-resolution curvature evidence
         if: always()
         uses: actions/upload-artifact@v4
