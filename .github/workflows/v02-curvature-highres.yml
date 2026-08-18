@@ -45,6 +45,9 @@ jobs:
       - name: Run q_sigma domain-convergence diagnostic
         run: python -m simulations.v02_qsigma_domain_root
 
+      - name: Run split linearization consistency diagnostic
+        run: python -m simulations.v02_split_linearization
+
       - name: Upload high-resolution curvature evidence
         if: always()
         uses: actions/upload-artifact@v4
