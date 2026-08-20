@@ -1,0 +1,75 @@
+name: V0.2 Publication Readiness Gate
+
+on:
+  push:
+    branches:
+      - dev/v0.2
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publication-gate:
+    name: Recompute core V0.2 evidence and evaluate gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-validation.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-validation.txt
+
+      - name: Unit tests
+        run: python -m pytest -q
+
+      - name: V0.1 quick regression
+        run: python -m validation.run_v01 --quick
+
+      - name: Reference critical splitting
+        run: python -m simulations.v02_critical_splitting
+
+      - name: q_sigma domain stability
+        run: python -m simulations.v02_qsigma_domain_root
+
+      - name: Reference split linearization
+        run: python -m simulations.v02_split_linearization
+
+      - name: q_sigma curvature support
+        run: python -m simulations.v02_qsigma_curvature
+
+      - name: Cross-parameter splitting
+        run: python -m simulations.v02_cross_parameter_split
+
+      - name: Cross-parameter linearization
+        run: python -m simulations.v02_cross_parameter_linearization
+
+      - name: Evaluate frozen publication gate
+        id: gate
+        continue-on-error: true
+        run: python -m simulations.v02_publication_gate
+
+      - name: Upload publication evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v02-publication-gate-${{ github.run_id }}
+          path: results/v02_validation/
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Enforce gate result
+        if: steps.gate.outcome == 'failure'
+        run: |
+          echo "V0.2 remains scientifically incomplete for publication."
+          exit 1
