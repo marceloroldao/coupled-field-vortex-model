@@ -1,0 +1,7 @@
+{
+  "parameter_points": 3,
+  "converged_points": 3,
+  "stable_nonzero_sign_across_points": true,
+  "status": "CROSS_PARAMETER_SUPPORT",
+  "note": "Exploratory nearby-c scan; not a novelty or publication gate by itself."
+}

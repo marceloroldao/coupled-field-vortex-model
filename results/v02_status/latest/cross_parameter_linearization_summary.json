@@ -1,0 +1,9 @@
+{
+  "parameter_points": 3,
+  "converged_points": 3,
+  "linearization_consistent_points": 3,
+  "nonzero_split_points": 3,
+  "same_split_sign": true,
+  "status": "CROSS_PARAMETER_LINEARIZATION_SUPPORT",
+  "note": "Support is numerical and local; novelty still requires literature audit and independent review."
+}

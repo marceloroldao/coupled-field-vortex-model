@@ -1,0 +1,20 @@
+{
+  "gate": "V0.2 publication-readiness numerical gate",
+  "checks": {
+    "cross_parameter_split": true,
+    "reference_split_domain_stability": false,
+    "reference_linearization": false,
+    "cross_parameter_linearization": true,
+    "qsigma_curvature_numerical_support": true
+  },
+  "core_checks": [
+    "cross_parameter_split",
+    "reference_split_domain_stability",
+    "reference_linearization",
+    "cross_parameter_linearization",
+    "qsigma_curvature_numerical_support"
+  ],
+  "numerically_ready_for_literature_audit_and_paper_draft": false,
+  "classification": "INCOMPLETE",
+  "important_note": "Passing this gate is not a novelty claim. Publication still requires literature-priority audit, clear uncertainty accounting, and a final reproducibility run from a clean checkout."
+}

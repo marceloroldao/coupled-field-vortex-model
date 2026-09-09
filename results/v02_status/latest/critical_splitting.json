@@ -1,0 +1,15 @@
+{
+  "q_sigma": 1.2827787968399096,
+  "q_inf": 1.2821745509961426,
+  "delta_q_sigma_minus_q_inf": 0.0006042458437669485,
+  "sigma_at_q_sigma": -4.513618168680868e-15,
+  "sigma_at_q_inf": -3.926426272077934e-05,
+  "solver_residual_q_sigma": 1.7647483333299773e-08,
+  "solver_residual_q_inf": 1.7661216922901574e-08,
+  "A0_candidate_q_sigma": 0.00064896641663377,
+  "A0_candidate_q_inf": 0.00045353690926704104,
+  "shift_identity_error_q_sigma": 2.4418444474459282e-17,
+  "shift_identity_error_q_inf": 3.5175584233576584e-17,
+  "classification": "SPLIT",
+  "note": "Diagnostic only; novelty requires literature audit and cross-parameter validation."
+}
